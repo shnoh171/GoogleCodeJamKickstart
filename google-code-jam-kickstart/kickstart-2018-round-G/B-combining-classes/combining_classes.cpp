@@ -8,9 +8,14 @@
 
 using namespace std;
 
-// Incomplete code
-// https://code.google.com/codejam/contest/5374486/dashboard#s=p1
+// Q: https://code.google.com/codejam/contest/5374486/dashboard#s=p1
+// A: https://code.google.com/codejam/contest/5374486/dashboard#s=a&a=1
 // Assume dataset is in correct format
+
+// The algorithm's time complexity is O((N * log N + Q * N).
+// However, it can be improved to O((N * log N + Q * log N)) if we perform
+// binary search on the last step instead of linear search.
+// I missed that opportunity!
 
 struct class_score {
 	long L;
@@ -36,18 +41,18 @@ ifstream& get_scores_and_questions(ifstream& infile,
 void construct_score_rank_table(const vector<class_score>& class_scores,
 		vector<score_rank>& score_rank_table);
 ofstream& calculate_and_print_answer(ofstream& outfile,
-		const vector<score_rank>& score_rank_table, const vector<long>& questions);
+		const vector<score_rank>& score_rank_table, const vector<long>& K);
 
 int main()
 {
 	//ifstream infile("dataset/test.in");
 	//ofstream outfile("dataset/test.out");
 
-	ifstream infile("dataset/B-small-practice.in");
-	ofstream outfile("dataset/B-small-practice.out");
+	//ifstream infile("dataset/B-small-practice.in");
+	//ofstream outfile("dataset/B-small-practice.out");
 
-	//ifstream infile("dataset/B-large-practice.in");
-	//ofstream outfile("dataset/B-large-practice.out");
+	ifstream infile("dataset/B-large-practice.in");
+	ofstream outfile("dataset/B-large-practice.out");
 
 	string line;
 	getline(infile, line);
@@ -223,35 +228,47 @@ void construct_score_rank_table(const vector<class_score>& class_scores,
 }
 
 ofstream& calculate_and_print_answer(ofstream& outfile,
-		const vector<score_rank>& score_rank_table, const vector<long>& questions)
+		const vector<score_rank>& score_rank_table, const vector<long>& K)
 {
-	vector<long>::size_type Q = questions.size();
+	vector<long>::size_type Q = K.size();
 	long res = 0;
 
 	for (vector<long>::size_type i = 0; i != Q; i++) {
 		vector<score_rank>::size_type index = 0;
 		long score;
 
-		if (questions[i] > score_rank_table[score_rank_table.size() - 1].rank
+		if (K[i] > score_rank_table[score_rank_table.size() - 1].rank
 				+ score_rank_table[score_rank_table.size() - 1].curr_density_point - 1) {
 			score = 0;
 		}
-		else if (questions[i] == 1) {
+		else if (K[i] == 1) {
 			score = score_rank_table[0].score;
 		}
 		else {
-			while (questions[i] > score_rank_table[index].rank)
+			while (K[i] > score_rank_table[index].rank)
 				index++;
+
+			long curr_score = score_rank_table[index].score;
+			long curr_rank = score_rank_table[index].rank;
+			long prev_density_line = score_rank_table[index].prev_density_line;
 
 			if (index >= score_rank_table.size())
 				score = score_rank_table[score_rank_table.size() - 1].score;
 			else {
-				if (score_rank_table[index].prev_density_line == 0)
+				if (prev_density_line < 0) {
 					score = score_rank_table[index].score;
-				else
-					score = score_rank_table[index].score + 
-							(score_rank_table[index].rank - questions[i] + 1) /
-							score_rank_table[index].prev_density_line;
+				}
+				else if (prev_density_line == 0) {
+					if (K[i] == curr_rank)
+						score = curr_score;
+					else
+						score = score_rank_table[index-1].score;
+				}
+				else {
+					score = ((curr_rank - K[i]) % prev_density_line == 0)
+						  ? curr_score + (curr_rank - K[i]) / prev_density_line
+						  : curr_score + (curr_rank - K[i]) / prev_density_line + 1;
+				}
 			}
 		}
 		res += score * (i + 1);
