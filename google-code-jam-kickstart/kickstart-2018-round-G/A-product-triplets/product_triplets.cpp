@@ -8,9 +8,12 @@
 
 using namespace std;
 
+// https://code.google.com/codejam/contest/5374486/dashboard#s=p0
+
 // This algorithm's time compleixity is O(N^2) which is same as the given answer on
 // 'https://codejam.withgoogle.com/codejam/contest/5374486/dashboard#s=a&a=0',
 // but it takes about 10 min.
+
 // More optimization is needed to pass the given time limit (8 min).
 
 void split(const string& s, const char* delim, vector<string>& v);
