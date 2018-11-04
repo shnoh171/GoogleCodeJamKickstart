@@ -5,6 +5,9 @@
 #include <cstdlib>
 using namespace std;
 
+// https://www.acmicpc.net/problem/2450
+// Incomplete
+
 void split_to_int(const string& s, const char* delim, vector<int>& v);
 
 int main()
