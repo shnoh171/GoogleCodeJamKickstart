@@ -3,6 +3,8 @@
 #include <cmath>
 using namespace std;
 
+// https://beta.atcoder.jp/contests/abc113/tasks/abc113_b
+
 int main()
 {
 	int N, T, A;
