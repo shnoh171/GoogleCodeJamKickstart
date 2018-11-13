@@ -27,7 +27,7 @@ int main()
 
 	for (int i = m; i <= n; ++i)
 		if (primes[i] == true)
-			cout << i << endl;
+			cout << i << '\n';
 
 	return 0;
 }
