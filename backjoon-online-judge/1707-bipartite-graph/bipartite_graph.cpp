@@ -4,7 +4,7 @@
 #include <queue>
 using namespace std;
 
-// https://www.acmicpc.net/problem/1260
+// https://www.acmicpc.net/problem/1707
 
 class UndirectedGraph {
 	public:
@@ -23,22 +23,27 @@ int main()
 {
 	ios_base::sync_with_stdio(false);
 
-	int n, m, v;
-	cin >> n >> m >> v;
+	int k;
+	cin >> k;
 
-	UndirectedGraph G(n+1);
-	for (int i = 0; i < m; ++i) {
-		int node1, node2;
-		cin >> node1 >> node2;
-		G.AddEdge(node1, node2);
+	for (int i = 0; i < k; ++i) {
+		int v, e;
+		cin >> v >> e;
+
+		UndirectedGraph G(v+1);
+
+		for (int j = 0; j < e; ++j) {
+			int node1, node2;
+			cin >> node1 >> node2;
+			G.AddEdge(node1, node2);
+		}
+
+		cout << ((G.IsBipartite()) ? "YES" : "NO") << "\n";
 	}
-	G.SortNodes();
-
-	G.PrintDfs(v);
-	G.PrintBfs(v);
 
 	return 0;
 }
+
 
 UndirectedGraph::UndirectedGraph(int size) {
 	graph_size = size;
@@ -59,41 +64,26 @@ void UndirectedGraph::SortNodes() {
 		sort(nodes[i].begin(), nodes[i].end());
 }
 
-void UndirectedGraph::PrintDfs(int node) {
-	bool check[graph_size];
-	fill_n(check, graph_size, false);
-	PrintDfsAux(node, check);
-	cout << "\n";
-}
-
-void UndirectedGraph::PrintDfsAux(int node, bool* check) {
-	check[node] = true;
-	cout << node << " ";
-	for (int i = 0; i < nodes[node].size(); ++i) {
-		int next = nodes[node][i];
-		if (check[next] == false) PrintDfsAux(next, check);
-	}
-}
-
-void UndirectedGraph::PrintBfs(int node) {
+bool UndirectedGraph::IsBipartite() {
 	queue<int> q;
-	bool check[graph_size];
-	fill_n(check, graph_size, false);
+	int check[graph_size]; // 0: not visited, 1: left, 2: right
+	fill_n(check, graph_size, 0);
 
-	check[node] = true;
-	q.push(node);
+	check[1] = 1;
+	q.push(1);
 
 	while (q.empty() != true) {
 		int curr = q.front();
 		q.pop();
-		cout << curr << " ";
 		for (int i = 0; i < nodes[curr].size(); ++i) {
 			int next = nodes[curr][i];
-			if (check[next] == false) {
-				check[next] = true;
+			if (check[next] == 0) {
+				check[next] = (check[curr] == 1) ? 2 : 1;
 				q.push(next);
+			} else if (check[curr] == check[next]) {
+				return false;
 			}
 		}
 	}
-	cout << "\n";
+	return true;
 }
