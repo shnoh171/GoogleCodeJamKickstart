@@ -13,6 +13,7 @@ class UndirectedGraph {
 		void SortNodes();
 		void AddEdge(int node1, int node2);
 		bool IsBipartite();
+		bool IsPartiallyBipartite(int node, int check[]);
 
 	private:
 		int graph_size;
@@ -47,7 +48,9 @@ int main()
 
 UndirectedGraph::UndirectedGraph(int size) {
 	graph_size = size;
-	nodes.reserve(size);
+	vector<int> instance;
+	for (int i = 0; i < size; ++i) 
+		nodes.push_back(instance);
 }
 
 int UndirectedGraph::GetSize() {
@@ -65,12 +68,23 @@ void UndirectedGraph::SortNodes() {
 }
 
 bool UndirectedGraph::IsBipartite() {
-	queue<int> q;
 	int check[graph_size]; // 0: not visited, 1: left, 2: right
 	fill_n(check, graph_size, 0);
 
-	check[1] = 1;
-	q.push(1);
+	// start from 1 since 0 is not a valid node in this case
+	for (int i = 1; i < graph_size; ++i) {
+		if (check[i] == 0) 
+			if (!IsPartiallyBipartite(i, check))
+				return false;
+	}
+
+	return true;
+}
+
+bool UndirectedGraph::IsPartiallyBipartite(int node, int check[]) {
+	queue<int> q;
+	check[node] = 1;
+	q.push(node);
 
 	while (q.empty() != true) {
 		int curr = q.front();

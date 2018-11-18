@@ -12,11 +12,14 @@ class UndirectedGraph {
 		int GetSize();
 		void SortNodes();
 		void AddEdge(int node1, int node2);
-		bool IsBipartite();
+		void PrintDfs(int node);
+		void PrintBfs(int node);
 
 	private:
 		int graph_size;
 		vector<vector<int> > nodes;
+
+		void PrintDfsAux(int node, bool* check);
 };
 
 int main()
@@ -42,7 +45,10 @@ int main()
 
 UndirectedGraph::UndirectedGraph(int size) {
 	graph_size = size;
-	nodes.reserve(size);
+	//nodes.reserve(size);
+	vector<int> instance;
+	for (int i = 0; i < size; ++i) 
+		nodes.push_back(instance);
 }
 
 int UndirectedGraph::GetSize() {
