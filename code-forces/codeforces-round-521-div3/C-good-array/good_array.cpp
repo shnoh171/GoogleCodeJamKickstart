@@ -3,6 +3,8 @@
 #include <algorithm>
 using namespace std;
 
+// http://codeforces.com/contest/1077/problem/C
+
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -20,7 +22,8 @@ int main()
 
 	sort(a.begin(), a.end());
 
-	int sum = 0;
+	//int sum = 0;
+	long long sum = 0;
 	vector<int> good;
 
 	for (int i = 0; i < n; ++i) sum += (a[i].first);
