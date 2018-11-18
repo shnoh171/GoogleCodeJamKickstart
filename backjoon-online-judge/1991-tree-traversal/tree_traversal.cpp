@@ -3,8 +3,6 @@ using namespace std;
 
 // https://www.acmicpc.net/problem/1991
 
-const int size = 26;
-
 void preorder(int node, int tree[][2]);
 void inorder(int node, int tree[][2]);
 void postorder(int node, int tree[][2]);
