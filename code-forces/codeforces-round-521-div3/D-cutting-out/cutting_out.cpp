@@ -3,8 +3,8 @@
 #include <algorithm>
 using namespace std;
 
-void find(int start, int end, vector<pair<int, int> > counts);
-bool check(int num, vector<pair<int, int> > counts);
+void find(int start, int end, int k, vector<pair<int, int> > counts);
+bool check(int num, int k, vector<pair<int, int> > counts);
 
 int main()
 {
@@ -12,11 +12,13 @@ int main()
 
 	int n, k;
 	cin >> n >> k;
-	int s[n];
-	for (int i = 0; i < n; ++i) cin >> s[i];
 
 	unordered_map<int, int> hashmap;
-	for (int i = 0; i < n; ++i)	++hashmap[s[i]];
+	for (int i = 0; i < n; ++i) {
+		int val;
+		cin >> val;
+		++hashmap[val];
+	}
 
 	vector<pair<int, int> > counts;
 
@@ -31,22 +33,50 @@ int main()
 	sort(counts.begin(), counts.end());
 	reverse(counts.begin(), counts.end());
 
-	for (int i = 0; i < counts.size(); ++i)
-		cout << counts[i].first << " " << counts[i].second << endl;
+	//for (int i = 0; i < counts.size(); ++i)
+	//	cout << counts[i].first << " " << counts[i].second << endl;
 
-	find(1, n/k, counts);
+	find(1, n/k+1, k, counts);
 
 	return 0;
 }
 
-void find(int start, int end, vector<pair<int, int> > counts) {
-	if (start < end)
-		f
+void find(int upper, int lower, int k, vector<pair<int, int> > counts) {
+	if (upper == lower) {
+		int i = 0;
+		while (k > 0) {
+			int repeat = counts[i].first/upper;
+
+			if (k - repeat < 0) 
+				for (int j = 0; j < k; ++j) 
+					cout << counts[i].second << " ";
+			else
+				for (int j = 0; j < repeat; ++j) 
+					cout << counts[i].second << " ";
+
+			k -= repeat;
+			++i;
+		}
+	}
+
+	int mid = (upper + lower) / 2;
+
+	if (check(mid, k, counts))
+		find(lower, mid, k, counts);
+	else
+		find(mid+1, upper, k, counts);
 }
 
-bool check(int num, vector<pair<int, int> > counts) {
-	int sum = 0;
-	for (int i = 0; i < counts.size(); ++i) {
-		sum += counts.first;
+bool check(int num, int k, vector<pair<int, int> > counts) {
+	int cnt = 0;
+	int i;
+	while (k > 0) {
+		if (counts[i].first < num) break;
+
+		int repeat = counts[i].first/num;
+		k -= repeat;
+		++i;
 	}
+	if (k <= 0) return true;
+	else return false;
 }
