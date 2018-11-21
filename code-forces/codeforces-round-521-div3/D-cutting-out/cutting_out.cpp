@@ -1,9 +1,10 @@
 #include <iostream>
-#include <unordered_map>
+#include <vector>
+#include <map>
 #include <algorithm>
 using namespace std;
 
-void find(int start, int end, int k, vector<pair<int, int> > counts);
+void find(int lower, int upper, int k, vector<pair<int, int> > counts);
 bool check(int num, int k, vector<pair<int, int> > counts);
 
 int main()
@@ -13,7 +14,7 @@ int main()
 	int n, k;
 	cin >> n >> k;
 
-	unordered_map<int, int> hashmap;
+	map<int, int> hashmap;
 	for (int i = 0; i < n; ++i) {
 		int val;
 		cin >> val;
@@ -22,7 +23,7 @@ int main()
 
 	vector<pair<int, int> > counts;
 
-	for (unordered_map<int, int>::const_iterator iter = hashmap.begin();
+	for (map<int, int>::const_iterator iter = hashmap.begin();
 		 iter != hashmap.end(); ++iter) {
 		pair<int, int> instance;
 		instance.first = iter->second;
@@ -33,15 +34,13 @@ int main()
 	sort(counts.begin(), counts.end());
 	reverse(counts.begin(), counts.end());
 
-	//for (int i = 0; i < counts.size(); ++i)
-	//	cout << counts[i].first << " " << counts[i].second << endl;
-
 	find(1, n/k+1, k, counts);
+	cout << "\n";
 
 	return 0;
 }
 
-void find(int upper, int lower, int k, vector<pair<int, int> > counts) {
+void find(int lower, int upper, int k, vector<pair<int, int> > counts) {
 	if (upper == lower) {
 		int i = 0;
 		while (k > 0) {
@@ -57,20 +56,22 @@ void find(int upper, int lower, int k, vector<pair<int, int> > counts) {
 			k -= repeat;
 			++i;
 		}
+		return;
 	}
 
-	int mid = (upper + lower) / 2;
+	int mid = (upper + lower) / 2 + 1;
 
 	if (check(mid, k, counts))
-		find(lower, mid, k, counts);
+		find(mid, upper, k, counts);
 	else
-		find(mid+1, upper, k, counts);
+		find(lower, mid-1, k, counts);
 }
 
 bool check(int num, int k, vector<pair<int, int> > counts) {
 	int cnt = 0;
-	int i;
+	int i = 0;
 	while (k > 0) {
+		if (i >= counts.size()) break;
 		if (counts[i].first < num) break;
 
 		int repeat = counts[i].first/num;
@@ -80,3 +81,4 @@ bool check(int num, int k, vector<pair<int, int> > counts) {
 	if (k <= 0) return true;
 	else return false;
 }
+
