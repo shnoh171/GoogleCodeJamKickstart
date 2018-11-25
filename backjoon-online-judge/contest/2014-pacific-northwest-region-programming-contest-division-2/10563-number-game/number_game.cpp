@@ -15,8 +15,14 @@ int main()
 		int n;
 		cin >> n;
 
+
 		int numbers[n];
 		for (int j = 0; j < n; ++j) cin >> numbers[j];
+
+		if (n == 1) {
+			cout << "Alice\n";
+			continue;
+		}
 
 		int *one = find(numbers, numbers+n, 1);
 		int *left = one - 1;
