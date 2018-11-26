@@ -7,6 +7,7 @@ using namespace std;
 int main()
 {
 	ios_base::sync_with_stdio(false);
+	cin.tie(NULL); cout.tie(NULL);
 
 	int t;
 	cin >> t;
@@ -44,41 +45,36 @@ int main()
 		int num_when_left_first;
 		int num_when_right_first;
 
-		if (right - one == 2)
+		if (right - one == 1)
 			num_when_left_first = n - 1;
 		else
-			num_when_left_first = n - (right - one - 1);
+			num_when_left_first = n - (right - one);
 
-		if (one - left == 2)
+		if (one - left == 1)
 			num_when_right_first = n - 1;
 		else
-			num_when_right_first = n - (one - left - 1);
+			num_when_right_first = n - (one - left);
 
-		cout << "num_when_left_first = " << num_when_left_first << endl;
-		cout << "num_when_right_first = " << num_when_right_first << endl;
-
-		if (one == numbers) {
-			if (num_when_left_first % 2 == 0)
-				cout << "Alice\n";
-			else
-				cout << "Bob\n";
-			return 0;
-		} else if (one == numbers + n - 1) {
-			if (num_when_right_first % 2 == 0)
-				cout << "Alice\n";
-			else
-				cout << "Bob\n";
-			return 0;
-		}
-
+		bool alice_win_when_left_first = (num_when_left_first % 2 == 0);
+		bool alice_win_when_right_first = (num_when_right_first % 2 == 0);
 
 		/*
+		cout << "num_when_left_first = " << num_when_left_first << endl;
+		cout << "num_when_right_first = " << num_when_right_first << endl;
+		cout << "alice_win_when_left_first = " << alice_win_when_left_first << endl;
+		cout << "alice_win_when_right_first = " << alice_win_when_right_first << endl;
+		*/
 
-
-		if (left_last % 2 == 1 && right_last % 2 == 1) {
-			cout << "Bob\n";
-		} else if (left_last % 2 == 0 && right_last % 2 == 0) {
-			cout << "Alice\n";
+		if (one == numbers) {
+			if (alice_win_when_left_first)
+				cout << "Alice\n";
+			else
+				cout << "Bob\n";
+		} else if (one == numbers + n - 1) {
+			if (alice_win_when_right_first)
+				cout << "Alice\n";
+			else
+				cout << "Bob\n";
 		} else {
 			int *left = one - 1;
 			int *right = one + 1;
@@ -95,22 +91,23 @@ int main()
 				}
 			}
 
-			int left_size, right_size;
+			int left_size = one - left - 1;
+			int right_size = right - one - 1;
 
-			if (one == numbers) left_size = 0;
-			else left_size = one - left - 1;
+			/*
+			cout << "left_size = " << left_size << endl;
+			cout << "right_size = " << right_size << endl;
+			*/
 
-			if (one == numbers + n + 1) right_size = 0;
-			else right_size = right - one - 1;
-
-			if (left_last % 2 == 1 && left_size > right_size)
-				cout << "Bob\n";
-			else if (right_last % 2 == 1 && right_size > left_size)
-				cout << "Bob\n";
-			else
+			if (alice_win_when_left_first && alice_win_when_right_first)
 				cout << "Alice\n";
+			else if (alice_win_when_left_first && left_size <= right_size)
+				cout << "Alice\n";
+			else if (alice_win_when_right_first && right_size <= left_size)
+				cout << "Alice\n";
+			else
+				cout << "Bob\n";
 		}
-		*/
 	}
 
 	return 0;
