@@ -1,20 +1,11 @@
 #include <iostream>
 #include <map>
 #include <algorithm>
-#include <stack>
+#include <vector>
 using namespace std;
 
 bool IsRange(int i, int n) { return i >= 0 && i < n; }
-
-/* Counter Example of the current approach
-5
-2 1 4 3 5
-2 1 4 3 5
-2 1 3 4 5
-1 2 3 4 5
-1 2 3 4 5
-Answer: 2 1 3 4 5
- */
+bool IsAhead(int front, int back, vector<vector<int> >& cow_position);
 
 int main()
 {
@@ -25,56 +16,59 @@ int main()
 	int n;
 	cin >> n;
 
-	int cows[5][n];
+	int cow_sequence[5][n];
+	vector<vector<int> > cow_position(5, vector<int>(n+1));
 
-	for (int i = 0; i < 5; ++i) 
-		for (int j = 0; j < n; ++j) 
-			cin >> cows[i][j];
+	for (int i = 0; i < 5; ++i) {
+		for (int j = 0; j < n; ++j) {
+			int cow;
+			cin >> cow;
+			cow_sequence[i][j] = cow;
+			cow_position[i][cow] = j;
+		}
+	}
 
 	int res[n];
 	int prev_cow = 0, preprev_cow = 0;
 
 	for (int i = 0; i < n; ++i) {
 		map<int, int> counts;
+
 		for (int j = i-1; j <= i+1; ++j) {
 			if (!IsRange(j, n)) continue;
-
 			for (int k = 0; k < 5; ++k) {
-				int cow = cows[k][j];
+				int cow = cow_sequence[k][j];
 				if (cow != prev_cow && cow != preprev_cow)
 					++counts[cow];
 			}
-
-			stack<int> candidates;
-			for (map<int, int>::const_iterator k = counts.begin(); k != counts.end(); ++k) 
-				if (k->second >= 4) candidates.push(k->first);
-
-			while (!candidates.empty()) {
-				int candidate = candidates.top();
-				candidates.pop();
-
-
-			}
-
-
-
-
-			bool flag = false;
-			for (map<int, int>::const_iterator k = counts.begin(); k != counts.end(); ++k) {
-				if (k->second >= 4) {
-					res[i] = k->first;
-					preprev_cow = prev_cow;
-					prev_cow = k->first;
-					flag = true;
-					break;
-				}
-			}
-			if (flag) break;
 		}
-	}	
+
+		vector<int> candidates;
+		for (map<int, int>::const_iterator k = counts.begin(); k != counts.end(); ++k) 
+			if (k->second >= 4) candidates.push_back(k->first);
+
+		int idx = 0;
+		for (int j = 1; j < candidates.size(); ++j) 
+			if (IsAhead(candidates[j], candidates[idx], cow_position)) 
+				idx = j;
+
+		res[i] = candidates[idx];
+		preprev_cow = prev_cow;
+		prev_cow = res[i];
+	}
 
 	for (int i = 0; i < n; ++i )
 		cout << res[i] << '\n';
 
 	return 0;
+}
+
+bool IsAhead(int front, int back, vector<vector<int> >& cow_position)
+{
+	int count = 0;
+	for (int i = 0; i < 5; ++i)
+		if (cow_position[i][front] < cow_position[i][back])
+			++count;
+
+	return count >= 3;
 }
