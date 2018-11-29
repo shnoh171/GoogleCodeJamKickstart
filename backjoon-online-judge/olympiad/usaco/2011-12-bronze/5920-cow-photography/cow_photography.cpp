@@ -4,7 +4,7 @@
 #include <vector>
 using namespace std;
 
-bool IsRange(int i, int n) { return i >= 0 && i < n; }
+bool IsRange(int i, int n); 
 bool IsAhead(int front, int back, vector<vector<int> >& cow_position);
 
 int main()
@@ -16,13 +16,11 @@ int main()
 	int n;
 	cin >> n;
 
-	int cow_sequence[5][n];
+	vector<vector<int> > cow_sequence(5, vector<int>(n));
 	vector<vector<int> > cow_position(5, vector<int>(n+1));
-
 	for (int i = 0; i < 5; ++i) {
 		for (int j = 0; j < n; ++j) {
-			int cow;
-			cin >> cow;
+			int cow; cin >> cow;
 			cow_sequence[i][j] = cow;
 			cow_position[i][cow] = j;
 		}
@@ -44,7 +42,8 @@ int main()
 		}
 
 		vector<int> candidates;
-		for (map<int, int>::const_iterator k = counts.begin(); k != counts.end(); ++k) 
+		for (map<int, int>::const_iterator k = counts.begin();
+			 k != counts.end(); ++k) 
 			if (k->second >= 4) candidates.push_back(k->first);
 
 		int idx = 0;
@@ -61,6 +60,11 @@ int main()
 		cout << res[i] << '\n';
 
 	return 0;
+}
+
+bool IsRange(int i, int n) 
+{ 
+	return i >= 0 && i < n; 
 }
 
 bool IsAhead(int front, int back, vector<vector<int> >& cow_position)
