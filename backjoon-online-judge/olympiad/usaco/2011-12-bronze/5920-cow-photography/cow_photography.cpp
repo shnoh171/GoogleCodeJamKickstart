@@ -1,6 +1,7 @@
 #include <iostream>
 #include <map>
 #include <algorithm>
+#include <stack>
 using namespace std;
 
 bool IsRange(int i, int n) { return i >= 0 && i < n; }
@@ -43,6 +44,20 @@ int main()
 				if (cow != prev_cow && cow != preprev_cow)
 					++counts[cow];
 			}
+
+			stack<int> candidates;
+			for (map<int, int>::const_iterator k = counts.begin(); k != counts.end(); ++k) 
+				if (k->second >= 4) candidates.push(k->first);
+
+			while (!candidates.empty()) {
+				int candidate = candidates.top();
+				candidates.pop();
+
+
+			}
+
+
+
 
 			bool flag = false;
 			for (map<int, int>::const_iterator k = counts.begin(); k != counts.end(); ++k) {
