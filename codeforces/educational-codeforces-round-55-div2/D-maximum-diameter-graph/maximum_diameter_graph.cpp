@@ -12,7 +12,7 @@ int main()
 	vector<int> one;
 	vector<pair<int, int> > many;
 
-	cin >> n;
+	cin >> n; // 3 <= n <= 500
 	for (int i = 1; i < n+1; ++i) {
 		int edge;
 		cin >> edge;
@@ -45,30 +45,26 @@ int main()
 	for (int i = 0; i < many.size(); ++i)
 		available += many[i].second - 2;
 	available += 2;
-	
-	if (one.size() == 0) {
-		cout << "YES " << many.size()-1 << "\n";
-		cout << many.size()-1 << "\n";
-		for (int i = 1; i < many.size(); ++i)
-			cout << many[i-1].first << " " << many[i].first << "\n";
-
-		return 0;
-	}
 
 	if (available < one.size()) {
 		cout << "NO\n";
 		return 0;
 	}
 
+	if (one.size() == 0) {
+		cout << "YES " << many.size()-1 << "\n";
+		cout << many.size()-1 << "\n";
+		for (int i = 1; i < many.size(); ++i)
+			cout << many[i-1].first << " " << many[i].first << "\n";
+		return 0;
+	}
+
 	if (one.size() == 1) {
 		cout << "YES " << many.size() << "\n";
 		cout << many.size() << "\n";
-		
 		cout << one[0] << " " << many[0].first << "\n";
-
 		for (int i = 1; i < many.size(); ++i)
 			cout << many[i-1].first << " " << many[i].first << "\n";
-
 		return 0;
 	}
 
@@ -82,12 +78,12 @@ int main()
 
 	int j = 0;
 	for (int i = 2; i < one.size(); ++i) {
-		if (many[j].second == 2) ++j;
+		while (many[j].second == 2) ++j;
+		//if (many[j].second == 2) ++j;
 
 		--(many[j].second);
 		cout << one[i] << " " << many[j].first << "\n";
 	}
-
 
 	return 0;
 }
