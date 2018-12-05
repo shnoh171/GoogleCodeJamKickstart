@@ -17,7 +17,7 @@ int main()
 	do {
 		for (int i = 0; i < n; ++i) cout << list[i] << " ";
 		cout << "\n";
-	} while(next_permutation(list, list+n)); 
+	} while (next_permutation(list, list+n)); 
 
 	return 0;
 }
