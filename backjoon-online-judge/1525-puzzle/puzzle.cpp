@@ -156,8 +156,8 @@ vector<int> MoveRight(vector<int> instance)
 	int idx = 0;
 	while (instance[idx] != 0) ++idx;
 
-	instance[idx] = instance[idx-1];
-	instance[idx-1] = 0;
+	instance[idx] = instance[idx+1];
+	instance[idx+1] = 0;
 
 	return instance;
 }
@@ -167,8 +167,8 @@ vector<int> MoveLeft(vector<int> instance)
 	int idx = 0;
 	while (instance[idx] != 0) ++idx;
 
-	instance[idx] = instance[idx+1];
-	instance[idx+1] = 0;
+	instance[idx] = instance[idx-1];
+	instance[idx-1] = 0;
 
 	return instance;
 }
