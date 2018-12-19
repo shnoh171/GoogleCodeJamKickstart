@@ -3,7 +3,6 @@
 using namespace std;
 
 // https://www.acmicpc.net/problem/5918
-// Incomplete
 
 int main()
 {
@@ -19,12 +18,18 @@ int main()
 	for (int i = 1; i < m+1; ++i) cin >> c[i];
 	sort(x, x+n);
 
+	int min_c[m+1];
+	min_c[m] = c[m];
+	for (int i = m-1; i >= 0; --i) {
+		min_c[i] = min(min_c[i+1], c[i]);
+	}
+
 	int d[n];
-	d[0] = c[1];
+	d[0] = min_c[1];
 	for (int i = 1; i < n; ++i) {
-		d[i] = c[x[i]-x[0]+ 1];
+		d[i] = min_c[x[i]-x[0]+ 1];
 		for (int j = 0; j < i; ++j) {
-			d[i] = min(d[i], d[j] + c[x[i]-x[j+1]+1]);
+			d[i] = min(d[i], d[j] + min_c[x[i]-x[j+1]+1]);
 		}
 	}
 
