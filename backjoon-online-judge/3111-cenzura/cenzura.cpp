@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <stack>
+#include <fstream>
 using namespace std;
 
 void PopIfExist(stack<char> &s, string word);
@@ -11,8 +12,15 @@ int main()
 	cin.tie(NULL);
 	cout.tie(NULL);
 
+	
+	ifstream fin;
+	ofstream fout;
+	fin.open("test/cenzura.in.7");
+	fout.open("test/res.out");
+	
+
 	string a, t;
-	cin >> a >> t;
+	fin >> a >> t;	
 	string a_rev = a;
 	reverse(a_rev.begin(), a_rev.end());
 
@@ -40,20 +48,23 @@ int main()
 		char c = left.top();
 		left.pop();
 		right.push(c);
-		if (count++ < a.size())
+		if (count++ < a.size()) {
 			PopIfExist(right, a);
+			count = 0;
+		}
 	}
 
 	if (right.empty()) return 0;
 
 	while (!right.empty()) {
-		cout << right.top();
+		fout << right.top();
 		right.pop();
 	}
-	cout << "\n";
+	fout << "\n";
 
-	cout << endl;
+	cout << flush;
 	system("pause");
+
 	return 0;
 }
 
