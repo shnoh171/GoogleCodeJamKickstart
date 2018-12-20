@@ -11,9 +11,6 @@ int main()
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	stack<int> e;
-	cout << e.max_size() << endl;
-
 	string a, t;
 	cin >> a >> t;
 	string a_rev = a;
@@ -55,6 +52,8 @@ int main()
 	}
 	cout << "\n";
 
+	cout << endl;
+	system("pause");
 	return 0;
 }
 
