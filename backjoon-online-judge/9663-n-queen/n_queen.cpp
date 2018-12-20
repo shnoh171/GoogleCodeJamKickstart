@@ -6,7 +6,7 @@ const int dx[3] = { -1, 0, 1 };
 const int dy[3] = { 1, 1, 1 };
 
 bool IsRange(int y, int x, int n) { return y >= 0 && y < n && x >= 0 && x < n; }
-int CalNumOfQ(int y, vector<vector<bool>> board);
+int CalNumOfQ(int y, vector<vector<bool> > board);
 
 int main()
 {
@@ -16,7 +16,7 @@ int main()
 
 	int n;
 	cin >> n;
-	vector<vector<bool>> board(n, vector<bool>(n));
+	vector<vector<bool> > board(n, vector<bool>(n));
 	for (int i = 0; i < n; ++i)
 		for (int j = 0; j < n; ++j)
 			board[i][j] = true;
@@ -26,7 +26,7 @@ int main()
 	return 0;
 }
 
-int CalNumOfQ(int y, vector<vector<bool>> board)
+int CalNumOfQ(int y, vector<vector<bool> > board)
 {
 	int n = board.size();
 	if (y == n) return 1;
@@ -35,7 +35,7 @@ int CalNumOfQ(int y, vector<vector<bool>> board)
 
 	for (int x = 0; x < n; ++x) {
 		if (board[y][x]) {
-			vector<vector<bool>> next = board;
+			vector<vector<bool> > next = board;
 			for (int i = 0; i < 3; ++i) {
 				int next_y = y, next_x = x;
 				while (IsRange(next_y, next_x, n)) {
