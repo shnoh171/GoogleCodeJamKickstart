@@ -1,6 +1,11 @@
 #include <iostream>
-#include <queue>
+#include <stack>
+#include <string>
 using namespace std;
+
+// Note that the order of explosion does not matter.
+
+void PrintNotEmptyStack(stack<pair<char, int>> &s);
 
 int main()
 {
@@ -8,52 +13,52 @@ int main()
 	cin.tie(NULL);
 	cout.tie(NULL);
 
-	string s, bomb;
-	cin >> s >> bomb;
+	string text, explosion;
+	cin >> text >> explosion;
 
-	queue<char> first, second;
-	for (int i = 0; i < s.size(); ++i)
-		first.push(s[i]);
-
-	queue<char> &curr = first;
-	queue<char> &next = second;
-
-	int count = 1;
-	while (count != 0 && curr.size() >= bomb.size()) {
-		count = 0;
-		string temp;
-
-		while (!curr.empty()) {
-			char c = curr.front();
-			curr.pop();
-
-			if (temp.size() < bomb.size()) {
-				temp += c;
-			} else if (temp == bomb) {
-				temp = c;
-				++count;
-			} else {
-				next.push(temp[0]);
-				temp = temp.substr(1, temp.size()-1);
-				temp += c;
-			}
+	stack<pair<char, int>> s;
+	for (int i = 0; i < text.size(); ++i) {
+		if (s.empty() || s.top().second == -1) {
+			if (text[i] == explosion[0])
+				s.push(pair<char, int>(text[i], 0));
+			else
+				s.push(pair<char, int>(text[i], -1));
+		}
+		else {
+			int prev = s.top().second;
+			if (text[i] == explosion[prev+1])
+				s.push(pair<char, int>(text[i], prev + 1));
+			else if (text[i] == explosion[0])
+				s.push(pair<char, int>(text[i], 0));
+			else
+				s.push(pair<char, int>(text[i], -1));
 		}
 
-		if (temp != bomb)
-			for (int i = 0; i < temp.size(); ++i)
-				next.push(temp[i]);
-
-		swap(curr, next);
+		if (s.top().second == explosion.size() - 1) {
+			for (int j = 0; j < explosion.size(); ++j)
+				s.pop();
+		}
 	}
 
-	if (curr.empty())
-		cout << "FRULA";
-
-	while (!curr.empty()) {
-		cout << curr.front();
-		curr.pop();
+	if (s.empty()) {
+		cout << "FRULA\n";
 	}
-	cout << "\n";
+	else {
+		PrintNotEmptyStack(s);
+		cout << "\n";
+	}
 
 	return 0;
+}
+
+void PrintNotEmptyStack(stack<pair<char, int>> &s)
+{
+	if (s.empty()) return;
+
+	char c = s.top().first;
+	s.pop();
+	PrintNotEmptyStack(s);
+	cout << c;
+
+	return;
 }
