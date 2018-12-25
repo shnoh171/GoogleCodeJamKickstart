@@ -28,7 +28,6 @@ int main()
 		vector<int> left(n), right(n);
 		for (int i = 0; i < n; ++i) cin >> h[i];
 
-		// TODO: if equal height
 		stack<element> s;
 		for (int i = 0; i < n; ++i) {
 			int curr_height = h[i];
