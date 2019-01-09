@@ -1,8 +1,7 @@
 #include <iostream>
 #include <algorithm>
+#include <cstring>
 using namespace std;
-
-// Incomplete
 
 int main()
 {
@@ -19,27 +18,23 @@ int main()
 	}
 	sort(coin, coin+n);
 
-	if (k < coin[0]) {
-		cout << 0 << "\n";
-		return 0;
-	}
-	
 	int d[k+1];
-	for (int i = 0; i < coin[0]; ++i) {
-		d[i] = 0;
-	}
-	d[coin[0]] = 1;
-
-	for (int i = coin[0]+1; i <= k; ++i) {
-		d[i] = n;
-		for (int j = 0; j < n; ++j) {
-			if (i - coin[j] >= 0) {
-				d[i] = min(d[i], d[i - coin[j]] + 1);
+	for (int i = 0; i < k+1; ++i)
+		d[i] = (i % coin[0] == 0) ? 1 : 0;
+	
+	for (int i = 1; i < n; ++i) {
+		for (int j = k; j >= 1; --j) {
+			int curr = 0;
+			int idx = j;
+			while (idx >= 0) {
+				curr += d[idx];
+				idx -= coin[i];
 			}
+			d[j] = curr;
 		}
 	}
-
-	cout << d[k] << "\n";	
-
+	
+	cout << d[k] << "\n";
+	
 	return 0;
 }
