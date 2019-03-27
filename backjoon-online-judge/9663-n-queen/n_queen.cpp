@@ -5,7 +5,7 @@ using namespace std;
 int GetNumberOfCases(int n);
 int GetNumberOfCasesSub(int y, vector<vector<bool>> &board);
 bool IsValid(int y, int x, vector<vector<bool>> &board);
-bool IsRange(int y, int x, int size) { y >= 0 && y < size && x >= 0 && x < size; }
+bool IsRange(int y, int x, int size) { return y >= 0 && y < size && x >= 0 && x < size; }
 
 int main()
 {
