@@ -2,11 +2,10 @@
 #include <vector>
 using namespace std;
 
-const int dx[3] = { -1, 0, 1 };
-const int dy[3] = { 1, 1, 1 };
-
-bool IsRange(int y, int x, int n) { return y >= 0 && y < n && x >= 0 && x < n; }
-int CalNumOfQ(int y, vector<vector<bool> > board);
+int GetNumberOfCases(int n);
+int GetNumberOfCasesSub(int y, vector<vector<bool>> &board);
+bool IsValid(int y, int x, vector<vector<bool>> &board);
+bool IsRange(int y, int x, int size) { y >= 0 && y < size && x >= 0 && x < size; }
 
 int main()
 {
@@ -16,47 +15,44 @@ int main()
 
 	int n;
 	cin >> n;
-	vector<vector<bool> > board(n, vector<bool>(n));
-	for (int i = 0; i < n; ++i)
-		for (int j = 0; j < n; ++j)
-			board[i][j] = true;
-
-	cout << CalNumOfQ(0, board) << "\n";
+	cout << GetNumberOfCases(n) << "\n";
 
 	return 0;
 }
 
-int CalNumOfQ(int y, vector<vector<bool> > board)
+int GetNumberOfCases(int n)
 {
-	int n = board.size();
-	if (y == n) return 1;
+	vector<vector<bool>> board(n, vector<bool>(n, false));
+	return GetNumberOfCasesSub(0, board);
+}
 
-	int res = 0;
+int GetNumberOfCasesSub(int y, vector<vector<bool>> &board)
+{
+	if (y >= board.size()) return 1;
 
-	for (int x = 0; x < n; ++x) {
-		if (board[y][x]) {
-			vector<vector<bool> > next = board;
-			for (int i = 0; i < 3; ++i) {
-				int next_y = y, next_x = x;
-				while (IsRange(next_y, next_x, n)) {
-					next[next_y][next_x] = false;
-					next_y += dy[i];
-					next_x += dx[i];
-				}
-			}
-			/*
-			cout << "(y, x) = (" << y << ", " << x << ")\n";
-			for (int i = 0; i < n; ++i) {
-				for (int j = 0; j < n; ++j) {
-					cout << next[i][j] << " ";
-				}
-				cout << endl;
-			}
-			cout << endl;
-			*/
-			res += CalNumOfQ(y+1, next);
+	int ret = 0;
+	for (int x = 0; x < board.size(); ++x) {
+		if (IsValid(y, x, board)) {
+			board[y][x] = true;
+			ret += GetNumberOfCasesSub(y+1, board);
+			board[y][x] = false;
 		}
 	}
+	return ret;
+}
 
-	return res;
+bool IsValid(int y, int x, vector<vector<bool>> &board)
+{
+	//   1 2 3 4 5
+	// 1 x   x   x
+	// 2   x x x
+	// 3     o
+	int dx = 0;
+	while (--y >= 0) {
+		++dx;
+		if (board[y][x]) return false;
+		if (IsRange(y, x-dx, board.size()) && board[y][x-dx]) return false;
+		if (IsRange(y, x+dx, board.size()) && board[y][x+dx]) return false;
+	}
+	return true;
 }
