@@ -55,16 +55,16 @@ void _GetAllPossibleSequences(vector<vector<int>>& sequences, vector<int> curr_s
         unordered_set<BSTNode*> next_ptrs = ptrs;
 
         curr_seq.push_back(ptr->value);
-        if (ptr->left != NULL) ptrs.insert(ptr->left);
-        if (ptr->right != NULL) ptrs.insert(ptr->right);
-        ptrs.erase(ptr);
+        if (ptr->left != NULL) next_ptrs.insert(ptr->left);
+        if (ptr->right != NULL) next_ptrs.insert(ptr->right);
+        next_ptrs.erase(ptr);
 
-        _GetAllPossibleSequences(sequences, curr_seq, ptrs);
+        _GetAllPossibleSequences(sequences, curr_seq, next_ptrs);
 
         curr_seq.pop_back();
-        if (ptr->left != NULL) ptrs.erase(ptr->left);
-        if (ptr->right != NULL) ptrs.erase(ptr->right);
-        ptrs.insert(ptr);
+        if (ptr->left != NULL) next_ptrs.erase(ptr->left);
+        if (ptr->right != NULL) next_ptrs.erase(ptr->right);
+        next_ptrs.insert(ptr);
     }
 }
 
